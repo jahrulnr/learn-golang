@@ -1,0 +1,18 @@
+version: '3.0'
+services:
+  service-a:
+    image: goservice:1.0
+    container_name: go-a
+    environment:
+        TZ: "Asia/Jakarta"
+        INSTANCE_ID: test
+        PORT: 7080
+    ports:
+        - 7080:7080
+    volumes:
+      - ./main.go:/app/main.go:ro
+      - ./src:/app/src:ro
+      - ./go.mod:/app/go.mod:ro
+      - ./go.work:/app/go.work:ro
+      - ./Makefile:/app/Makefile:ro
+    working_dir: /app

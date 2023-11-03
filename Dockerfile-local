@@ -1,0 +1,25 @@
+FROM golang:alpine
+
+RUN apk update && apk add --no-cache git
+
+RUN mkdir /app
+COPY ./main.go /app/main.go
+COPY ./src /app/src
+COPY ./go.mod /app/go.mod
+COPY ./go.work /app/go.work
+COPY ./Makefile /app/Makefile
+
+WORKDIR /app
+
+ARG INSTANCE_ID=test
+ARG PORT=7080
+
+RUN go env -w GO111MODULE=off
+RUN go build -o binary
+
+COPY ./configs/start.sh /start.sh
+RUN chmod +x /start.sh
+
+EXPOSE 7080
+
+ENTRYPOINT ["/start.sh"]

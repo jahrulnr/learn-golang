@@ -14,7 +14,7 @@ WORKDIR /app
 ARG INSTANCE_ID=test
 ARG PORT=7080
 
-RUN go env -w GO111MODULE=off
+# RUN go env -w GO111MODULE=off
 RUN go build -o binary
 
 COPY ./configs/start.sh /start.sh

@@ -26,3 +26,8 @@ rebuild: clean
 
 shell:
 	docker exec -it $(container) sh
+
+go-build:
+	go build -o ./build/app1
+go-run:
+	INSTANCE_ID=test PORT=7080 ./build/${app} 

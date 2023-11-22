@@ -3,11 +3,11 @@ package models
 import "database/sql"
 
 type User struct {
-	Id          int
+	Id          int `json:"id,omitempty"`
 	Name        string
 	Username    string
-	Password    string
+	Password    string `json:"password,omitempty"`
 	Accesstoken AccessToken
-	CreatedAt   string
-	UpdatedAt   sql.NullString
+	CreatedAt   string         `json:"created_at,omitempty"`
+	UpdatedAt   sql.NullString `json:"updated_at,omitempty"`
 }

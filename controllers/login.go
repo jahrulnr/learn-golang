@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
-	"fmt"
 	"learning/testapp/models"
 	"learning/testapp/utils"
 	"net/http"
@@ -28,6 +26,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		http.Error(w, "Username/Password is invalid", http.StatusNotAcceptable)
+		db.Close()
 		return
 	}
 
@@ -42,17 +41,25 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			http.Error(w, "Oops! something wrong", http.StatusInternalServerError)
-			fmt.Printf("err.Error(): %v\n", err.Error())
+			utils.Log("Database", err.Error())
+			db.Close()
 			return
 		}
 
-		timeLog := time.Now().GoString()
-		accessToken.Token, err = utils.HashPassword(user.Username + "|" + user.Password + "|" + time.Now().GoString())
+		timeLog := time.Now().Format("2006-01-02 15:04:05")
+		accessToken.Token, err = utils.HashPassword(user.Username + "|" + user.Password + "|" + timeLog)
 		accessToken.CreatedAt = timeLog
 		user.Accesstoken = accessToken
 
-		file, _ := json.MarshalIndent(user, "", "")
-		response = string(file)
+		result, err = db.Query("insert into accessToken (user_id, accessToken) values (?, ?)", user.Id, accessToken.Token)
+		if err != nil {
+			http.Error(w, "Oops! something wrong", http.StatusInternalServerError)
+			utils.Log("Database", err.Error())
+			db.Close()
+			return
+		}
+
+		response = utils.JsonResponse(true, user)
 	}
 	db.Close()
 

@@ -1,6 +1,6 @@
 package models
 
 type AccessToken struct {
-	Token     string
-	CreatedAt string
+	Token     string `json:"token,omitempty"`
+	CreatedAt string `json:"created_at,omitempty"`
 }

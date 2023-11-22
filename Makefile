@@ -29,5 +29,5 @@ shell:
 
 go-build:
 	go build -o ./build/app1
-go-run:
-	INSTANCE_ID=test PORT=7080 ./build/${app} 
+go-run: go-build
+	PORT=7080 ./build/app1
